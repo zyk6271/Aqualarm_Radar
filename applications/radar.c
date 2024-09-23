@@ -120,15 +120,14 @@ uint8_t sensor_pir_level_read(void)
 
 static void radar_service_thread_entry(void *parameter)
 {
-    static uint8_t radar_status,pir_status = 0;
+    static uint8_t radar_status = 0;
     static uint32_t delay_time = 0;
     rt_thread_mdelay(2000);
     RF_HeartWithMain();
     while(1)
     {
         radar_status = sensor_radar_level_read();
-        pir_status = sensor_pir_level_read();
-        if(radar_status == 1 && pir_status == 1)
+        if(radar_status)
         {
             if(human_detect_flag == 0)
             {
@@ -136,12 +135,12 @@ static void radar_service_thread_entry(void *parameter)
                 led_work_human_detected();
                 RF_Open_Valve();
             }
-            delay_time = (5 * 60 * 1000) + (radar_delay_time_level_read() * 30 * 1000);
+            delay_time = (15 * 60 * 1000) + (radar_delay_time_level_read() * 60 * 1000);
             rt_timer_stop(radar_detect_timer);
             rt_timer_control(radar_detect_timer, RT_TIMER_CTRL_SET_TIME, &delay_time);
             rt_timer_start(radar_detect_timer);
         }
-        LOG_D("radar status:[%d],pir status:[%d],human_detect:[%d],total_time:[%d]",radar_status,pir_status,human_detect_flag,delay_time);
+        LOG_D("radar status:[%d],human_detect:[%d],total_time:[%d]",radar_status,human_detect_flag,delay_time);
         rt_thread_mdelay(1000);
     }
 }

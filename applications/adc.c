@@ -109,7 +109,7 @@ static void adc_thread_entry(void *parameter)
     rt_thread_mdelay(1000);
     while(1)
     {
-        radar_delay_time_level_temp = (uint8_t)(adc_value_temp[0] / 204);
+        radar_delay_time_level_temp = (uint8_t)(adc_value_temp[0] / 274);
         if(radar_delay_time_level_temp != radar_delay_time_level)
         {
             radar_delay_time_level = radar_delay_time_level_temp;
