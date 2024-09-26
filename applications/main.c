@@ -14,8 +14,11 @@
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
+#define MCU_VER     "1.0.3"
+
 int main(void)
 {
+    LOG_I("System Version is %s\r\n",MCU_VER);
     led_init();
     button_init();
     radar_init();

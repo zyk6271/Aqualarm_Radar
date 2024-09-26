@@ -16,6 +16,7 @@ rt_thread_t led_thread = RT_NULL;
 led_mem_opreation_t led_mem_opreation;
 
 static led_t *led_obj_learn = RT_NULL;
+static led_t *led_obj_heart = RT_NULL;
 static led_t *led_obj_sys_run = RT_NULL;
 static led_t *led_obj_detected = RT_NULL;
 
@@ -39,6 +40,16 @@ static void on_green_off(void *param)
     ws2812b_green(0,0);
 }
 
+static void heart_blue_on(void *param)
+{
+    ws2812b_blue(0,1);
+}
+
+static void heart_blue_off(void *param)
+{
+    ws2812b_blue(0,0);
+}
+
 void led_work_sys_run(void)
 {
     led_stop(led_obj_detected);
@@ -49,6 +60,11 @@ void led_work_human_detected(void)
 {
     led_stop(led_obj_sys_run);
     led_start(led_obj_detected);
+}
+
+void led_heart_send(void)
+{
+    led_start(led_obj_heart);
 }
 
 void led_learn_succcess(void)
@@ -81,6 +97,9 @@ void led_init(void)
 
     led_obj_learn = led_create(off_red_on, off_red_off, NULL);
     led_set_mode(led_obj_learn, 5, "200,200,");
+
+    led_obj_heart = led_create(heart_blue_on, heart_blue_off, NULL);
+    led_set_mode(led_obj_heart, 1, "200,1,");
 
     led_thread = rt_thread_create("signal_led",led_run,RT_NULL,512,RT_THREAD_PRIORITY_MAX/2,100);
     rt_thread_startup(led_thread);

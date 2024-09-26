@@ -88,5 +88,7 @@ void RF_HeartWithMain(void)
     tx_frame.tx_data = data;
     tx_frame.tx_len = 3;
     radio_mainunit_command_send(&tx_frame);
+
+    led_heart_send();
 }
 
